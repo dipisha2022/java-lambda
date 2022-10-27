@@ -73,7 +73,7 @@ pipeline {
                 script {
                     if (env.BRANCH_NAME == "master") {
                         timeout(time: 1, unit: 'HOURS') {
-                            input('Ask Before Prod  ?')
+                            input('Ask Before Prod?')
                         }
                     }
                 }
