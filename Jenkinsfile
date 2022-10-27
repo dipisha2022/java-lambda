@@ -57,10 +57,10 @@ pipeline {
                     sh 'aws configure set aws_access_key_id $AWS_ACCESS_KEY'
                     sh 'aws configure set aws_secret_access_key $AWS_SECRET_KEY'
                     sh 'aws configure set region us-east-1' 
-                    sh "aws s3 cp target/${JARNAME} s3://pardip22/QA/"
+                    sh "aws s3 cp target/${JARNAME} s3://pardip22/lambda-QA/"
 
 
-                    sh "aws lambda update-function-code --function-name test  --zip-file fileb://target/${JARNAME}"
+                    sh "aws lambda update-function-code --function-name QA  --zip-file fileb://target/${JARNAME}"
 
                 }          
             }
@@ -73,7 +73,7 @@ pipeline {
                 script {
                     if (env.BRANCH_NAME == "master") {
                         timeout(time: 1, unit: 'HOURS') {
-                            input('Proceed for Prod  ?')
+                            input('Ask Before Prod  ?')
                         }
                     }
                 }
@@ -91,10 +91,10 @@ pipeline {
                         echo "VERSION: ${VERSION}"
                         JARNAME = ARTIFACTID+'-'+VERSION+'.jar'
 
-                        sh "aws s3 cp target/${JARNAME} s3://bermtec228/lambda-prod/"
+                        sh "aws s3 cp target/${JARNAME} s3://pardip22/lambda-deploy/"
                         //  sh './deploy-test.sh $AWS_ACCESS_KEY $AWS_SECRET_KEY'
-                        // if (does_lambda_exist('prodfunction')) {
-                            sh "aws lambda update-function-code --function-name prodfunction --s3-bucket bermtec228 --s3-key lambda-prod/${JARNAME}"
+                        // if (does_lambda_exist('deployfunction')) {
+                            sh "aws lambda update-function-code --function-name deployfunction --s3-bucket pardip22 --s3-key lambda-deploy/${JARNAME}"
                         //}  
                     }
                 }
@@ -106,7 +106,7 @@ pipeline {
     post {
       failure {
         echo 'failed'
-             mail to: 'teambermtec@gmail.com',
+             mail to: 'dparikh2023@gmail.com',
              subject: "Failed Pipeline: ${currentBuild.fullDisplayName}",
              body: "Something is wrong with ${env.BUILD_NUMBER}"
       }
@@ -123,7 +123,7 @@ def does_lambda_exist(String name) {
   isexist=false
   echo $name
   try{
-    sh  'aws lambda get-function --function-name test'
+    sh  'aws lambda get-function --function-name QA'
     isexist=true
   }
   catch(Exception e) {
