@@ -91,7 +91,7 @@ pipeline {
                         echo "VERSION: ${VERSION}"
                         JARNAME = ARTIFACTID+'-'+VERSION+'.jar'
 
-                        sh "aws s3 cp target/${JARNAME} s3://pardip22/lambda-deploy/"
+                        sh "aws s3 cp target/${JARNAME} s3://parikh2022/lambda-deploy/"
                         //  sh './deploy-test.sh $AWS_ACCESS_KEY $AWS_SECRET_KEY'
                         // if (does_lambda_exist('deployfunction')) {
                             sh "aws lambda update-function-code --function-name deployfunction --s3-bucket parikh2022 --s3-key lambda-deploy/${JARNAME}"
