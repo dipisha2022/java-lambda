@@ -57,7 +57,7 @@ pipeline {
                     sh 'aws configure set aws_access_key_id $AWS_ACCESS_KEY'
                     sh 'aws configure set aws_secret_access_key $AWS_SECRET_KEY'
                     sh 'aws configure set region us-east-1' 
-                    sh "aws s3 cp target/${JARNAME} s3://pardip22/lambda-QA/"
+                    sh "aws s3 cp target/${JARNAME} s3://parikh2022/lambda-QA/"
 
 
                     sh "aws lambda update-function-code --function-name QA  --zip-file fileb://target/${JARNAME}"
@@ -94,7 +94,7 @@ pipeline {
                         sh "aws s3 cp target/${JARNAME} s3://pardip22/lambda-deploy/"
                         //  sh './deploy-test.sh $AWS_ACCESS_KEY $AWS_SECRET_KEY'
                         // if (does_lambda_exist('deployfunction')) {
-                            sh "aws lambda update-function-code --function-name deployfunction --s3-bucket pardip22 --s3-key lambda-deploy/${JARNAME}"
+                            sh "aws lambda update-function-code --function-name deployfunction --s3-bucket parikh2022 --s3-key lambda-deploy/${JARNAME}"
                         //}  
                     }
                 }
@@ -106,7 +106,7 @@ pipeline {
     post {
       failure {
         echo 'failed'
-             mail to: 'dparikh2023@gmail.com',
+             mail to: 'teambermtec@gmail.com',
              subject: "Failed Pipeline: ${currentBuild.fullDisplayName}",
              body: "Something is wrong with ${env.BUILD_NUMBER}"
       }
